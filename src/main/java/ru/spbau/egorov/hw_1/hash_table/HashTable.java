@@ -1,12 +1,13 @@
 package ru.spbau.egorov.hw_1.hash_table;
 
+import javafx.util.Pair;
 import ru.spbau.egorov.hw_1.list.List;
 
 /**
  * This class implements chained hash table with linked list.Values and keys are Strings.
  */
 public class HashTable {
-    private static final int TABLE_SIZE = 514229;
+    private int TABLE_SIZE = 514229;
     private int size = 0;
     private List[] hashTable;
 
@@ -43,6 +44,8 @@ public class HashTable {
         String oldValue = hashTable[key.hashCode() % TABLE_SIZE].add(key, value);
         if (oldValue == null)
             size++;
+
+        resize();
         return oldValue;
     }
 
@@ -67,6 +70,41 @@ public class HashTable {
             hashTable[i] = new List();
     }
 
+    private void resize() {
+        if (2 * size < TABLE_SIZE)
+            return;
+
+        List[] oldTable = new List[TABLE_SIZE];
+        for (int i = 0; i < TABLE_SIZE; i++)
+            oldTable[i] = new List();
+
+        for (int i = 0; i < TABLE_SIZE; i++)
+            for (int j = 0; ; j++) {
+                Pair<String, String> pa = hashTable[i].getByIndex(j);
+                if (pa == null)
+                    break;
+                oldTable[i].add(pa.getKey(), pa.getValue());
+            }
+
+        List[] newTable = new List[TABLE_SIZE * 2];
+        for (int i = 0; i < TABLE_SIZE * 2; i++)
+            newTable[i] = new List();
+
+        hashTable = newTable;
+
+        int oldTableSize = TABLE_SIZE;
+        size = 0;
+        TABLE_SIZE *= 2;
+
+        for (int i = 0; i < oldTableSize; i++)
+            for (int j = 0; ; j++) {
+                Pair<String, String> pa = oldTable[i].getByIndex(j);
+                if (pa == null)
+                    break;
+                put(pa.getKey(), pa.getValue());
+            }
+    }
+
     /**
      * Basic tests.
      */
@@ -88,5 +126,10 @@ public class HashTable {
 
         assert ht.size() == 0;
         assert !ht.contains("jo2");
+
+        for (int i = 0; i < 300000; i++) {
+            String s = "" + i;
+            ht.put(s, "Jo");
+        }
     }
 }

@@ -94,4 +94,27 @@ class HashTableTest {
         assertEquals(false, ht.contains("Jo"));
     }
 
+    @Test
+    void sameHashCode() {
+        HashTable ht = new HashTable();
+        ht.put("AaAa", "jo");
+        ht.put("BBBB", "Jo");
+        assertEquals("jo", ht.get("AaAa"));
+        assertEquals("Jo", ht.get("BBBB"));
+    }
+
+    @Test
+    void resizeHashTable() {
+        HashTable ht = new HashTable();
+        for (int i = 0; i < 300000; i++) {
+            String s = "" + i;
+            ht.put(s, "Jo");
+        }
+        assertEquals(300000, ht.size());
+
+        for (int i = 0; i < 300000; i++) {
+            assertEquals("Jo", ht.get("" + i));
+        }
+    }
+
 }

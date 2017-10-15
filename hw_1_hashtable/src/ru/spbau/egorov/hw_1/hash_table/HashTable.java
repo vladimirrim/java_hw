@@ -1,18 +1,19 @@
 package ru.spbau.egorov.hw_1.hash_table;
 
+import javafx.util.Pair;
 import ru.spbau.egorov.hw_1.list.List;
 
 /**
  * This class implements chained hash table with linked list.Values and keys are Strings.
  */
 public class HashTable {
-    private static final int TABLE_SIZE = 514229;
+    private int tableSize = 514229;
     private int size = 0;
     private List[] hashTable;
 
     public HashTable() {
-        hashTable = new List[TABLE_SIZE];
-        for (int i = 0; i < TABLE_SIZE; i++)
+        hashTable = new List[tableSize];
+        for (int i = 0; i < tableSize; i++)
             hashTable[i] = new List();
     }
 
@@ -31,7 +32,7 @@ public class HashTable {
     }
 
     public String get(String key) {
-        return hashTable[key.hashCode() % TABLE_SIZE].get(key);
+        return hashTable[key.hashCode() % tableSize].get(key);
     }
 
     /**
@@ -40,9 +41,11 @@ public class HashTable {
      * @return Previous element with the same key` value.
      */
     public String put(String key, String value) {
-        String oldValue = hashTable[key.hashCode() % TABLE_SIZE].add(key, value);
+        String oldValue = hashTable[key.hashCode() % tableSize].add(key, value);
         if (oldValue == null)
             size++;
+
+        resize();
         return oldValue;
     }
 
@@ -52,7 +55,7 @@ public class HashTable {
      * @return Removed element`s value.
      */
     public String remove(String key) {
-        String oldValue = hashTable[key.hashCode() % TABLE_SIZE].remove(key);
+        String oldValue = hashTable[key.hashCode() % tableSize].remove(key);
         if (oldValue != null)
             size--;
         return oldValue;
@@ -63,8 +66,43 @@ public class HashTable {
      */
     public void clear() {
         size = 0;
-        for (int i = 0; i < TABLE_SIZE; i++)
+        for (int i = 0; i < tableSize; i++)
             hashTable[i] = new List();
+    }
+
+    private void resize() {
+        if (2 * size < tableSize)
+            return;
+
+        List[] oldTable = new List[tableSize];
+        for (int i = 0; i < tableSize; i++)
+            oldTable[i] = new List();
+
+        for (int i = 0; i < tableSize; i++)
+            for (int j = 0; ; j++) {
+                Pair<String, String> pa = hashTable[i].getByIndex(j);
+                if (pa == null)
+                    break;
+                oldTable[i].add(pa.getKey(), pa.getValue());
+            }
+
+        List[] newTable = new List[tableSize * 2];
+        for (int i = 0; i < tableSize * 2; i++)
+            newTable[i] = new List();
+
+        hashTable = newTable;
+
+        int oldTableSize = tableSize;
+        size = 0;
+        tableSize *= 2;
+
+        for (int i = 0; i < oldTableSize; i++)
+            for (int j = 0; ; j++) {
+                Pair<String, String> pa = oldTable[i].getByIndex(j);
+                if (pa == null)
+                    break;
+                put(pa.getKey(), pa.getValue());
+            }
     }
 
     /**
@@ -88,5 +126,10 @@ public class HashTable {
 
         assert ht.size() == 0;
         assert !ht.contains("jo2");
+
+        for (int i = 0; i < 300000; i++) {
+            String s = "" + i;
+            ht.put(s, "Jo");
+        }
     }
 }

@@ -1,5 +1,6 @@
 package ru.spbau.egorov.hw_4.zipfile;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -11,23 +12,6 @@ import java.util.zip.ZipOutputStream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ZipFileTest {
-
-
-    private void deleteDirectory(File directory) {
-        if (directory.exists()) {
-            File[] files = directory.listFiles();
-            if (null != files) {
-                for (File file : files) {
-                    if (file.isDirectory()) {
-                        deleteDirectory(file);
-                    } else {
-                        file.delete();
-                    }
-                }
-            }
-        }
-        directory.delete();
-    }
 
     private void zipFile(String filename, ZipOutputStream out, String text) throws IOException {
         ZipEntry e = new ZipEntry(filename);
@@ -56,7 +40,7 @@ class ZipFileTest {
             assertEquals(i, scanner.nextInt());
             assertFalse(scanner.hasNextInt());
         }
-        deleteDirectory(new File("___test"));
+        FileUtils.deleteDirectory(new File("___test"));
     }
 
 
@@ -97,7 +81,7 @@ class ZipFileTest {
 
         assertFalse((new File("___test/layer1/layer2/layer3/layer4/___test2").exists()));
 
-        deleteDirectory(new File("___test"));
+        FileUtils.deleteDirectory(new File("___test"));
     }
 
 }

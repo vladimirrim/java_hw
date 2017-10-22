@@ -10,17 +10,22 @@ import java.util.Arrays;
  */
 public class Trie implements Serializable {
     private final static int ALPHABET_SIZE = 65536;
+    private final static int PREFIX_END = -1;
     private ArrayList<Vertex> symbols;
     private int size;
 
+    /**
+     * This class represents end of prefix in trie.It`s edges represent next symbol in prefix.Contains count of same prefixes and flag if this
+     * prefix is added string.
+     */
     private class Vertex {
         int next[];
-        boolean leaf;
+        boolean isLeaf;
         int prefixCount;
 
         Vertex() {
             next = new int[ALPHABET_SIZE];
-            Arrays.fill(next, -1);
+            Arrays.fill(next, PREFIX_END);
         }
     }
 
@@ -31,6 +36,7 @@ public class Trie implements Serializable {
 
     /**
      * Add element to the trie.O(|element|) time.
+     *
      * @return false if element was already in trie.
      */
     public boolean add(String element) {
@@ -41,16 +47,19 @@ public class Trie implements Serializable {
         size++;
         int v = 0;
         for (char c : element.toCharArray()) {
-            if (symbols.get(v).next[c] == -1) {
-                symbols.get(v).next[c] = symbols.size();
+            Vertex curSymbol = symbols.get(v);
+
+            if (curSymbol.next[c] == PREFIX_END) {
+                curSymbol.next[c] = symbols.size();
                 symbols.add(new Vertex());
             }
-            symbols.get(v).prefixCount++;
-            v = symbols.get(v).next[c];
+
+            curSymbol.prefixCount++;
+            v = curSymbol.next[c];
         }
 
         symbols.get(v).prefixCount++;
-        return symbols.get(v).leaf = true;
+        return symbols.get(v).isLeaf = true;
     }
 
 
@@ -60,16 +69,17 @@ public class Trie implements Serializable {
     public boolean contains(String element) {
         int v = 0;
         for (char c : element.toCharArray()) {
-            if (symbols.get(v).next[c] == -1) {
+            if (symbols.get(v).next[c] == PREFIX_END) {
                 return false;
             }
             v = symbols.get(v).next[c];
         }
-        return symbols.get(v).leaf;
+        return symbols.get(v).isLeaf;
     }
 
     /**
      * Remove element from the trie.O(|element|) time.
+     *
      * @return false if element was not in the trie.
      */
     public boolean remove(String element) {
@@ -84,11 +94,12 @@ public class Trie implements Serializable {
             v = symbols.get(v).next[c];
         }
         symbols.get(v).prefixCount--;
-        return !(symbols.get(v).leaf = false);
+        return !(symbols.get(v).isLeaf = false);
     }
 
     /**
      * O(1) time.
+     *
      * @return strings count.
      */
     public int size() {
@@ -102,7 +113,7 @@ public class Trie implements Serializable {
 
         int v = 0;
         for (char c : prefix.toCharArray()) {
-            if (symbols.get(v).next[c] == -1) {
+            if (symbols.get(v).next[c] == PREFIX_END) {
                 return 0;
             }
             v = symbols.get(v).next[c];
@@ -123,7 +134,7 @@ public class Trie implements Serializable {
                 dout.writeInt(ind);
 
             dout.writeInt(symbols.get(i).prefixCount);
-            dout.writeBoolean(symbols.get(i).leaf);
+            dout.writeBoolean(symbols.get(i).isLeaf);
         }
         dout.close();
     }
@@ -145,7 +156,7 @@ public class Trie implements Serializable {
                 symbols.get(i).next[ind] = din.readInt();
 
             symbols.get(i).prefixCount = din.readInt();
-            symbols.get(i).leaf = din.readBoolean();
+            symbols.get(i).isLeaf = din.readBoolean();
         }
         din.close();
     }

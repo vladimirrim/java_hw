@@ -1,5 +1,6 @@
 package ru.spbau.egorov.hw_6.predicate;
 
+import org.jetbrains.annotations.NotNull;
 import ru.spbau.egorov.hw_6.function1.Function1;
 
 /**
@@ -15,7 +16,7 @@ public interface Predicate<T> extends Function1<T, Boolean> {
      * @param p is predicate.
      * @return f || p.
      */
-    default Predicate<T> or(Predicate<T> p) {
+    default Predicate<T> or(@NotNull Predicate<T> p) {
         return t -> apply(t) || p.apply(t);
     }
 
@@ -25,7 +26,7 @@ public interface Predicate<T> extends Function1<T, Boolean> {
      * @param p is predicate.
      * @return f && p.
      */
-    default Predicate<T> and(Predicate<T> p) {
+    default Predicate<T> and(@NotNull Predicate<T> p) {
         return t -> apply(t) && p.apply(t);
     }
 

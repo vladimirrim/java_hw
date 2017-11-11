@@ -13,8 +13,7 @@ public class Maybe<T> {
 
     private T value;
 
-    @NotNull
-    private Maybe(T t) {
+    private Maybe(@NotNull T t) {
         value = t;
     }
 
@@ -29,8 +28,7 @@ public class Maybe<T> {
      * @param t   value to contain
      * @param <T> type of t.
      */
-    @NotNull
-    public static <T> Maybe<T> just(T t) {
+    public static <T> Maybe<T> just(@NotNull T t) {
         return new Maybe<>(t);
     }
 
@@ -45,12 +43,12 @@ public class Maybe<T> {
 
 
     /**
-     * @throws MaybeNothingException if Maybe contains null.
+     * @throws ValueNotPresentException if Maybe contains null.
      */
-    public T get() throws MaybeNothingException {
+    public T get() throws ValueNotPresentException {
         if (value != null)
             return value;
-        throw new MaybeNothingException();
+        throw new ValueNotPresentException();
     }
 
 
@@ -67,10 +65,10 @@ public class Maybe<T> {
      *
      * @param <U> type of modified value.
      */
-    public <U> Maybe<U> map(Function<T, U> mapper) {
+    public <U> Maybe<U> map(@NotNull Function<T, U> mapper) {
         if (isPresent())
             return new Maybe<>(mapper.apply(value));
-        return nothing();
+        return new Maybe<>();
     }
 
 }

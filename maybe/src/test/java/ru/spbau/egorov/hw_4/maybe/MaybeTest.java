@@ -11,20 +11,20 @@ class MaybeTest {
 
 
     @Test
-    void justInteger() throws MaybeNothingException {
+    void justInteger() throws ValueNotPresentException {
         Maybe<Integer> ma = Maybe.just(8);
         assertEquals(Integer.valueOf(8), ma.get());
     }
 
     @Test
-    void justString() throws MaybeNothingException {
+    void justString() throws ValueNotPresentException {
         Maybe<String> ma = Maybe.just("asasgjgdfjgh");
         assertEquals("asasgjgdfjgh", ma.get());
     }
 
     @Test
     void nothingException() {
-        Throwable e = assertThrows(MaybeNothingException.class, () -> {
+        Throwable e = assertThrows(ValueNotPresentException.class, () -> {
             Maybe.nothing().get();
         });
     }
@@ -40,24 +40,26 @@ class MaybeTest {
     }
 
     @Test
-    void mapSquareInteger() throws MaybeNothingException {
+    void mapSquareInteger() throws ValueNotPresentException {
         assertEquals(Integer.valueOf(64), Maybe.just(8).map(x -> x * x).get());
     }
 
     @Test
-    void mapNothing() throws MaybeNothingException {
+    void mapNothing() throws ValueNotPresentException {
         assertFalse(Maybe.nothing().map(x -> "jo").isPresent());
     }
 
     @Test
-    void readAndWriteFromFile() throws IOException, MaybeNothingException {
+    void readAndWriteFromFile() throws IOException, ValueNotPresentException {
         ArrayList<Maybe<Integer>> inputLines = new ArrayList<>();
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("testInput.txt"))) {
-            String line = bufferedReader.readLine();
-            try {
-                inputLines.add(Maybe.just(Integer.parseInt(line)));
-            } catch (NumberFormatException e) {
-                inputLines.add(Maybe.nothing());
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                try {
+                    inputLines.add(Maybe.just(Integer.parseInt(line)));
+                } catch (NumberFormatException e) {
+                    inputLines.add(Maybe.nothing());
+                }
             }
         }
 
@@ -78,11 +80,13 @@ class MaybeTest {
 
         ArrayList<Maybe<Integer>> outputLines = new ArrayList<>();
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("testOutput.txt"))) {
-            String line = bufferedReader.readLine();
-            try {
-                outputLines.add(Maybe.just(Integer.parseInt(line)));
-            } catch (NumberFormatException e) {
-                outputLines.add(Maybe.nothing());
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                try {
+                    outputLines.add(Maybe.just(Integer.parseInt(line)));
+                } catch (NumberFormatException e) {
+                    outputLines.add(Maybe.nothing());
+                }
             }
         }
 

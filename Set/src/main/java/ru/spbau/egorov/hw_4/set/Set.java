@@ -18,18 +18,21 @@ public class Set<T extends Comparable<T>> {
 
 
     private class Node {
-        Node left;
-        Node right;
-        T value;
+        private Node left;
+        private Node right;
+        private T value;
 
-        Node(Node l, Node r, T val) {
+        private Node(Node l, Node r, T val) {
             left = l;
             right = r;
             value = val;
         }
     }
 
-    private Node getNode(T t, Node cur) {
+    /**
+     * Get node in the tree if the value t is in tree or create new node to write new value in it.
+     */
+    private Node prepareNode(T t, Node cur) {
         if (cur.value == null)
             return cur;
 
@@ -39,13 +42,13 @@ public class Set<T extends Comparable<T>> {
         if (t.compareTo(cur.value) < 0) {
             if (cur.right == null)
                 cur.right = new Node(null, null, null);
-            return getNode(t, cur.right);
+            return prepareNode(t, cur.right);
         }
 
         if (cur.left == null)
             cur.left = new Node(null, null, null);
 
-        return getNode(t, cur.left);
+        return prepareNode(t, cur.left);
     }
 
     /**
@@ -54,14 +57,14 @@ public class Set<T extends Comparable<T>> {
     public void add(@NotNull T t) {
         if (!contains(t))
             size++;
-        getNode(t, root).value = t;
+        prepareNode(t, root).value = t;
     }
 
     /**
      * Check if the element is in tree.
      */
     public boolean contains(@NotNull T t) {
-        return getNode(t, root).value != null;
+        return prepareNode(t, root).value != null;
     }
 
     /**

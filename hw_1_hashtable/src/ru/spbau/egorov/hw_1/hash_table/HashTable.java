@@ -74,35 +74,21 @@ public class HashTable {
         if (2 * size < tableSize)
             return;
 
-        List[] oldTable = new List[tableSize];
-        for (int i = 0; i < tableSize; i++)
-            oldTable[i] = new List();
+        List[] newTable = new List[tableSize * 2];
+        for (int i = 0; i < tableSize * 2; i++)
+            newTable[i] = new List();
+
 
         for (int i = 0; i < tableSize; i++)
             for (int j = 0; ; j++) {
                 Pair<String, String> pa = hashTable[i].getByIndex(j);
                 if (pa == null)
                     break;
-                oldTable[i].add(pa.getKey(), pa.getValue());
+                newTable[pa.getKey().hashCode() % (tableSize * 2)].add(pa.getKey(), pa.getValue());
             }
-
-        List[] newTable = new List[tableSize * 2];
-        for (int i = 0; i < tableSize * 2; i++)
-            newTable[i] = new List();
 
         hashTable = newTable;
-
-        int oldTableSize = tableSize;
-        size = 0;
         tableSize *= 2;
-
-        for (int i = 0; i < oldTableSize; i++)
-            for (int j = 0; ; j++) {
-                Pair<String, String> pa = oldTable[i].getByIndex(j);
-                if (pa == null)
-                    break;
-                put(pa.getKey(), pa.getValue());
-            }
     }
 
     /**

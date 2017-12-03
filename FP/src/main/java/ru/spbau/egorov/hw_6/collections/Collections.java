@@ -6,6 +6,7 @@ import ru.spbau.egorov.hw_6.function2.Function2;
 import ru.spbau.egorov.hw_6.predicate.Predicate;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
 
 /**
@@ -21,7 +22,7 @@ public class Collections {
      * @param <E> is type of elements in collection.
      * @return collection with elements created by applying function to the previous elements.
      */
-    public static <T, E> ArrayList<T> map(@NotNull Function1<? super E, T> f, @NotNull Iterable<E> a) {
+    public static <T, E> List<T> map(@NotNull Function1<? super E, T> f, @NotNull Iterable<E> a) {
         ArrayList<T> arr = new ArrayList<>();
         for (E elem : a) {
             arr.add(f.apply(elem));
@@ -37,7 +38,7 @@ public class Collections {
      * @param <E> is type of elements in collection.
      * @return collection with elements which satisfying predicate.
      */
-    public static <E> ArrayList<E> filter(@NotNull Predicate<? super E> p, @NotNull Iterable<E> a) {
+    public static <E> List<E> filter(@NotNull Predicate<? super E> p, @NotNull Iterable<E> a) {
         ArrayList<E> arr = new ArrayList<>();
         for (E elem : a) {
             if (p.apply(elem))
@@ -54,7 +55,7 @@ public class Collections {
      * @param <E> is type of elements in collection.
      * @return collection with elements from the start to the first element that does not satisfy predicate.
      */
-    public static <E> ArrayList<E> takeWhile(@NotNull Predicate<? super E> p, @NotNull Iterable<E> a) {
+    public static <E> List<E> takeWhile(@NotNull Predicate<? super E> p, @NotNull Iterable<E> a) {
         ArrayList<E> arr = new ArrayList<>();
         for (E elem : a) {
             if (!p.apply(elem))
@@ -72,14 +73,8 @@ public class Collections {
      * @param <E> is type of elements in collection.
      * @return collection with elements from the start to the first element that does satisfy predicate.
      */
-    public static <E> ArrayList<E> takeUnless(@NotNull Predicate<? super E> p, @NotNull Iterable<E> a) {
-        ArrayList<E> arr = new ArrayList<>();
-        for (E elem : a) {
-            if (p.apply(elem))
-                break;
-            arr.add(elem);
-        }
-        return arr;
+    public static <E> List<E> takeUnless(@NotNull Predicate<? super E> p, @NotNull Iterable<E> a) {
+        return takeWhile(p.not(), a);
     }
 
     /**

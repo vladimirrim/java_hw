@@ -17,7 +17,6 @@ public class Maybe<T> {
         value = t;
     }
 
-
     private Maybe() {
         value = null;
     }
@@ -32,7 +31,6 @@ public class Maybe<T> {
         return new Maybe<>(t);
     }
 
-
     /**
      * Create new instance of Maybe which contains null.
      */
@@ -40,7 +38,6 @@ public class Maybe<T> {
     public static <T> Maybe<T> nothing() {
         return new Maybe<>();
     }
-
 
     /**
      * @throws ValueNotPresentException if Maybe contains null.
@@ -51,14 +48,12 @@ public class Maybe<T> {
         throw new ValueNotPresentException();
     }
 
-
     /**
      * Check if Maybe contains null.
      */
     public boolean isPresent() {
         return value != null;
     }
-
 
     /**
      * Apply function to value in Maybe and return new Maybe with modified value or Nothing if Maybe contains null.
@@ -68,7 +63,7 @@ public class Maybe<T> {
     public <U> Maybe<U> map(@NotNull Function<T, U> mapper) {
         if (isPresent())
             return new Maybe<>(mapper.apply(value));
-        return new Maybe<>();
+        return (Maybe<U>) this;
     }
 
 }

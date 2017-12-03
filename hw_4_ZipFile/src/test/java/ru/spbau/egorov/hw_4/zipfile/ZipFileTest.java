@@ -29,8 +29,10 @@ class ZipFileTest {
 
 
         for (int i = 0; i < 10; i++) {
+            ZipOutputStream out = new ZipOutputStream(new FileOutputStream(new File("___test" + File.separator + "___test" + i + ".zip")));
             zipFile("___test" + i,
-                    new ZipOutputStream(new FileOutputStream(new File("___test" + File.separator + "___test" + i + ".zip"))), "" + i);
+                    out, "" + i);
+            out.close();
         }
 
         ZipFile.unzipFiles("___test", "___(.*)");
@@ -39,6 +41,7 @@ class ZipFileTest {
             Scanner scanner = new Scanner(new File("___test" + File.separator + "___test" + i));
             assertEquals(i, scanner.nextInt());
             assertFalse(scanner.hasNextInt());
+            scanner.close();
         }
         FileUtils.deleteDirectory(Paths.get("___test").toFile());
     }
@@ -65,18 +68,21 @@ class ZipFileTest {
             Scanner scanner = new Scanner(new File("___test" + File.separator + "layer1" + File.separator + "___test1"));
             assertEquals(1, scanner.nextInt());
             assertFalse(scanner.hasNextInt());
+            scanner.close();
         }
 
         {
             Scanner scanner = new Scanner(new File("___test" + File.separator + "layer1" + File.separator + "layer2" + File.separator + "___test1"));
             assertEquals(1, scanner.nextInt());
             assertFalse(scanner.hasNextInt());
+            scanner.close();
         }
 
         {
             Scanner scanner = new Scanner(new File("___test" + File.separator + "layer1" + File.separator + "layer2" + File.separator + "layer3" + File.separator + "___test1"));
             assertEquals(1, scanner.nextInt());
             assertFalse(scanner.hasNextInt());
+            scanner.close();
         }
 
         assertFalse((new File("___test" + File.separator + "layer1" + File.separator + "layer2" + File.separator + "layer3" + File.separator + "layer4" + File.separator + "___test2").exists()));

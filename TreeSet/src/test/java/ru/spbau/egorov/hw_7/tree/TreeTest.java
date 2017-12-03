@@ -1,33 +1,33 @@
-package ru.spbau.egorov.hw_7.set;
+package ru.spbau.egorov.hw_7.tree;
 
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SetTest {
+class TreeTest {
     @Test
     void createSet() {
-        Set<Integer> s = new Set<>();
+        Tree<Integer> s = new Tree<>();
         assertNotNull(s);
     }
 
     @Test
     void addAndContainsOneElement() {
-        Set<String> s = new Set<>();
+        Tree<String> s = new Tree<>();
         s.add("0");
         assertTrue(s.contains("0"));
     }
 
     @Test
     void addAndContainsZeroElements() {
-        Set<String> s = new Set<>();
+        Tree<String> s = new Tree<>();
         assertFalse(s.contains("0"));
     }
 
     @Test
     void addAndContainsThousandElements() {
-        Set<Integer> s = new Set<>();
+        Tree<Integer> s = new Tree<>();
         for (int i = 0; i < 1000; i++)
             s.add(i);
         for (int i = 0; i < 1000; i++)
@@ -36,7 +36,7 @@ class SetTest {
 
     @Test
     void addAndContainsSameElement() {
-        Set<Integer> s = new Set<>();
+        Tree<Integer> s = new Tree<>();
         for (int i = 0; i < 1000; i++)
             s.add(0);
         assertTrue(s.contains(0));
@@ -44,7 +44,7 @@ class SetTest {
 
     @Test
     void sizeOneElement() {
-        Set<Integer> s = new Set<>();
+        Tree<Integer> s = new Tree<>();
         s.add(0);
         assertEquals(1, s.size());
     }
@@ -52,7 +52,7 @@ class SetTest {
 
     @Test
     void sizeThousandElements() {
-        Set<Integer> s = new Set<>();
+        Tree<Integer> s = new Tree<>();
         for (int i = 0; i < 1000; i++)
             s.add(i);
         assertEquals(1000, s.size());
@@ -60,7 +60,7 @@ class SetTest {
 
     @Test
     void sizeSameElement() {
-        Set<Integer> s = new Set<>();
+        Tree<Integer> s = new Tree<>();
         for (int i = 0; i < 1000; i++)
             s.add(0);
         assertEquals(1, s.size());

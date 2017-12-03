@@ -1,4 +1,4 @@
-package ru.spbau.egorov.hw_7.set;
+package ru.spbau.egorov.hw_7.tree;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -9,19 +9,19 @@ import java.util.Comparator;
  *
  * @param <T> type of contained elements.
  */
-public class Set<T> {
+public class Tree<T> {
     private int size;
     private Node root;
 
     private final Comparator<? super T> comparator;
 
-    public Set() {
+    public Tree() {
         root = new Node(null, null, null);
-        comparator = null;
+        comparator = (Comparator<T>) (o1, o2) -> ((Comparable<? super T>) o1).compareTo(o2);
     }
 
 
-    public Set(@NotNull Comparator<? super T> cmp) {
+    public Tree(@NotNull Comparator<? super T> cmp) {
         root = new Node(null, null, null);
         comparator = cmp;
     }
@@ -46,33 +46,17 @@ public class Set<T> {
         if (cur.value == null)
             return cur;
 
-        if (comparator == null) {
-            Comparable<? super T> cmpt = (Comparable<? super T>) t;
+        if (comparator.compare(t, cur.value) == 0)
+            return cur;
 
-            if (cmpt.compareTo(cur.value) == 0)
-                return cur;
-
-            if (cmpt.compareTo(cur.value) > 0) {
-                if (cur.right == null)
-                    cur.right = new Node(null, null, null);
-                return prepareNode(t, cur.right);
-            }
-
-            if (cur.left == null)
-                cur.left = new Node(null, null, null);
-        } else {
-            if (comparator.compare(t, cur.value) == 0)
-                return cur;
-
-            if (comparator.compare(t, cur.value) > 0) {
-                if (cur.right == null)
-                    cur.right = new Node(null, null, null);
-                return prepareNode(t, cur.right);
-            }
-
-            if (cur.left == null)
-                cur.left = new Node(null, null, null);
+        if (comparator.compare(t, cur.value) > 0) {
+            if (cur.right == null)
+                cur.right = new Node(null, null, null);
+            return prepareNode(t, cur.right);
         }
+
+        if (cur.left == null)
+            cur.left = new Node(null, null, null);
 
         return prepareNode(t, cur.left);
     }
@@ -111,7 +95,7 @@ public class Set<T> {
         if (cur.value == null)
             return null;
 
-        if (comparator == null ? ((Comparable<? super T>) t).compareTo(cur.value) <= 0 : comparator.compare(t, cur.value) <= 0)
+        if (comparator.compare(t, cur.value) <= 0)
             if (cur.left == null)
                 return cur.value;
             else {
@@ -138,7 +122,7 @@ public class Set<T> {
         if (cur.value == null)
             return null;
 
-        if (comparator == null ? ((Comparable<? super T>) t).compareTo(cur.value) < 0 : comparator.compare(t, cur.value) < 0)
+        if (comparator.compare(t, cur.value) < 0)
             if (cur.left == null)
                 return cur.value;
             else {
@@ -165,7 +149,7 @@ public class Set<T> {
         if (cur.value == null)
             return null;
 
-        if (comparator == null ? ((Comparable<? super T>) t).compareTo(cur.value) >= 0 : comparator.compare(t, cur.value) >= 0)
+        if (comparator.compare(t, cur.value) >= 0)
             if (cur.right == null)
                 return cur.value;
             else {
@@ -191,7 +175,7 @@ public class Set<T> {
         if (cur.value == null)
             return null;
 
-        if (comparator == null ? ((Comparable<? super T>) t).compareTo(cur.value) > 0 : comparator.compare(t, cur.value) > 0)
+        if (comparator.compare(t, cur.value) > 0)
             if (cur.right == null)
                 return cur.value;
             else {

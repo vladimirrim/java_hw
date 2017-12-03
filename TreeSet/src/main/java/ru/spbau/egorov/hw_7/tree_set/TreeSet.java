@@ -1,26 +1,31 @@
 package ru.spbau.egorov.hw_7.tree_set;
 
 import org.jetbrains.annotations.NotNull;
-import ru.spbau.egorov.hw_7.set.Set;
+import ru.spbau.egorov.hw_7.tree.Tree;
 
 import java.util.AbstractSet;
 import java.util.Comparator;
 import java.util.Iterator;
 
+/**
+ * This class implements set on binary search tree.
+ *
+ * @param <E> is the type of contained elements.
+ */
 public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
-    private Set<E> tree;
+    private Tree<E> tree;
     private final Comparator<? super E> comparator;
     private E first, last;
 
     public TreeSet() {
-        comparator = null;
-        tree = new Set<>();
+        comparator = (Comparator<E>) (o1, o2) -> ((Comparable<? super E>) o1).compareTo(o2);
+        tree = new Tree<>();
     }
 
 
     public TreeSet(Comparator<? super E> cmp) {
         comparator = cmp;
-        tree = new Set<>(cmp);
+        tree = new Tree<>(cmp);
     }
 
 
@@ -119,10 +124,10 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     @Override
     public boolean add(@NotNull E e) {
-        if (first == null || (comparator == null ? ((Comparable<? super E>) e).compareTo(first) < 0 : comparator.compare(e, first) < 0))
+        if (first == null || comparator.compare(e, first) < 0)
             first = e;
 
-        if (last == null || (comparator == null ? ((Comparable<? super E>) e).compareTo(last) > 0 : comparator.compare(e, last) > 0))
+        if (last == null || comparator.compare(e, last) > 0)
             last = e;
 
         return tree.add(e);

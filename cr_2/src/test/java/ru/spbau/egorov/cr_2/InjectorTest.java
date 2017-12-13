@@ -21,6 +21,7 @@ public class InjectorTest {
     public void injectorShouldInitializeClassWithoutDependencies()
             throws Exception {
         Object object = Injector.initialize("task.testClasses.ClassWithoutDependencies", Collections.emptyList());
+        Injector.clear();
         assertTrue(object instanceof ClassWithoutDependencies);
     }
 
@@ -33,6 +34,7 @@ public class InjectorTest {
         );
         assertTrue(object instanceof ClassWithOneClassDependency);
         ClassWithOneClassDependency instance = (ClassWithOneClassDependency) object;
+        Injector.clear();
         assertTrue(instance.dependency != null);
     }
 
@@ -45,6 +47,7 @@ public class InjectorTest {
         );
         assertTrue(object instanceof ClassWithOneInterfaceDependency);
         ClassWithOneInterfaceDependency instance = (ClassWithOneInterfaceDependency) object;
+        Injector.clear();
         assertTrue(instance.dependency instanceof InterfaceImpl);
     }
 
@@ -53,6 +56,7 @@ public class InjectorTest {
         ArrayList<Class<?>> a = new ArrayList<>();
         a.add(Class.forName("task.testClasses.ClassWithCycleDependenciesB"));
         a.add(Class.forName("task.testClasses.ClassWithCycleDependenciesA"));
+        Injector.clear();
         Injector.initialize("task.testClasses.ClassWithCycleDependenciesA",a);
     }
 
@@ -60,6 +64,16 @@ public class InjectorTest {
     public void testImplementationNotFoundException() throws Exception {
         ArrayList<Class<?>> a = new ArrayList<>();
         a.add(Class.forName("task.testClasses.ClassWithoutDependencies"));
+        Injector.clear();
         Injector.initialize("task.testClasses.ClassWithCycleDependenciesA",a);
+    }
+
+    @Test(expected = ru.spbau.egorov.cr_2.AmbiguousImplementationException.class)
+    public void testAmbiguousImplementationExceptionTwoDependencies() throws Exception {
+        ArrayList<Class<?>> a = new ArrayList<>();
+        a.add(Class.forName("task.testClasses.InterfaceImpl"));
+        a.add(Class.forName("task.testClasses.InterfaceImpl2"));
+        Injector.clear();
+        Injector.initialize("task.testClasses.ClassWithOneInterfaceDependency",a);
     }
 }

@@ -96,4 +96,9 @@ public class Injector {
         inited.put(rootClassName, root);
         return root;
     }
+
+    public static void clear(){
+        used.clear();
+        inited.clear();
+    }
 }

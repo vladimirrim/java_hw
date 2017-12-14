@@ -3,6 +3,7 @@ package ru.spbau.egorov.hw_8.calculator;
 import java.util.Arrays;
 
 import org.jetbrains.annotations.NotNull;
+import ru.spbau.egorov.hw_8.stack.EmptyStackException;
 import ru.spbau.egorov.hw_8.stack.Stack;
 
 import java.util.function.*;
@@ -28,7 +29,11 @@ public class Calculator {
      * @return calculation result.
      */
     public Double calc(String input) {
-        input = toRPN(input);
+        try {
+            input = toRPN(input);
+        } catch (EmptyStackException e) {
+            e.printStackTrace();
+        }
         Arrays.stream(input.split(" ")).forEach(number -> {
             switch (number) {
                 case "+":
@@ -47,15 +52,24 @@ public class Calculator {
                     numbers.push(Double.parseDouble(number));
             }
         });
-        return numbers.pop();
+        try {
+            return numbers.pop();
+        } catch (EmptyStackException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private void calcSign(Stack<Double> numbers, BiFunction<Double, Double, Double> operation) {
-        numbers.push(operation.apply(numbers.pop(), numbers.pop()));
+        try {
+            numbers.push(operation.apply(numbers.pop(), numbers.pop()));
+        } catch (EmptyStackException e) {
+            e.printStackTrace();
+        }
     }
 
     @NotNull
-    private String toRPN(String input) {
+    private String toRPN(String input) throws EmptyStackException {
         StringBuilder output = new StringBuilder(100);
         for (int i = 0; i < input.length(); i++)
             switch (input.charAt(i)) {

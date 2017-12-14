@@ -41,7 +41,7 @@ class StackTest {
     }
 
     @Test
-    void peekAfterPop() {
+    void peekAfterPop() throws EmptyStackException {
         Stack<Integer> stack = new Stack<>();
         for (int i = 0; i < 1000; i++)
             stack.push(i);
@@ -51,12 +51,17 @@ class StackTest {
     }
 
     @Test
-    void popThousandElements() {
+    void popThousandElements() throws EmptyStackException {
         Stack<Integer> stack = new Stack<>();
         for (int i = 0; i < 1000; i++)
             stack.push(i);
         for (int i = 0; i < 1000; i++)
             assertEquals((Integer) (1000 - i - 1), stack.pop());
+    }
+
+    @Test
+    void popEmptyStackException(){
+        assertThrows(EmptyStackException.class, () -> (new Stack<>()).pop());
     }
 
 }

@@ -2,6 +2,7 @@ package ru.spbau.egorov.hw_8.calculator;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
+import ru.spbau.egorov.hw_8.stack.EmptyStackException;
 import ru.spbau.egorov.hw_8.stack.Stack;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,7 +10,7 @@ import static org.mockito.Mockito.*;
 
 class CalculatorTest {
     @Test
-    void calcSmallExpression() {
+    void calcSmallExpression() throws EmptyStackException {
         Stack<Double> doubleMock = mock(Stack.class);
         when(doubleMock.pop()).thenReturn(200.0, 200.0, 400.0, 200.0, 600.0);
         Stack<Character> charMock = mock(Stack.class);
@@ -27,7 +28,7 @@ class CalculatorTest {
     }
 
     @Test
-    void calcAllSignsDifferentNumbers() {
+    void calcAllSignsDifferentNumbers() throws EmptyStackException {
         Stack<Double> doubleMock = mock(Stack.class);
         when(doubleMock.pop()).thenReturn(6.0, 8.0, 2.0, 4.0, 2.0, 2.0, 4.0, 7.0, 11.0);
         Stack<Character> charMock = mock(Stack.class);

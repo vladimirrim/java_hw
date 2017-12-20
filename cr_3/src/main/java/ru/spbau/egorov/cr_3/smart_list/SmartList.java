@@ -113,6 +113,8 @@ public class SmartList<E> extends AbstractList<E> implements List<E> {
         }
 
         if (size == FIRST_STAGE_UPPER_BOUND) {
+            if(index > 1)
+                throw new IndexOutOfBoundsException();
             E oldValue = ((E[]) container)[index];
             for (int i = index; i < SECOND_STAGE_UPPER_BOUND - 1; i++)
                 ((E[]) container)[i] = ((E[]) container)[i + 1];

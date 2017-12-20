@@ -10,6 +10,18 @@ import java.util.*;
 
 public class SmartListTest {
 
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void IndexOutOfBoundExceptionSecondStage(){
+        ArrayList<Integer> al = new ArrayList<>();
+
+        for(int i=0;i< 2;i++){
+            al.add(i);
+        }
+
+        SmartList<Integer> sl = new SmartList<>(al);
+        sl.remove(2);
+    }
+
     @Test
     public void createFromCollectionSecondStage(){
         ArrayList<Integer> al = new ArrayList<>();

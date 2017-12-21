@@ -102,25 +102,25 @@ public class Reflector {
      */
     public static void diffClasses(@NotNull Class<?> a, @NotNull Class<?> b) {
 
-        System.out.println("Unique fields, " + a.getSimpleName() + ":");
+        System.out.print("Unique fields, " + a.getSimpleName() + ":\n");
         for (Field t : a.getDeclaredFields()) {
             if (!Arrays.asList(b.getDeclaredFields()).contains(t))
                 System.out.println(t.toGenericString());
         }
 
-        System.out.println("Unique fields, " + b.getSimpleName() + ":");
+        System.out.print("Unique fields, " + b.getSimpleName() + ":\n");
         for (Field t : b.getDeclaredFields()) {
             if (!Arrays.asList(a.getDeclaredFields()).contains(t))
                 System.out.println(t.toGenericString());
         }
 
-        System.out.println("Unique methods, " + a.getSimpleName() + ":");
+        System.out.print("Unique methods, " + a.getSimpleName() + ":\n");
         for (Method t : a.getDeclaredMethods()) {
             if (!Arrays.asList(b.getDeclaredMethods()).contains(t))
                 System.out.println(t.toGenericString());
         }
 
-        System.out.println("Unique methods, " + b.getSimpleName() + ":");
+        System.out.print("Unique methods, " + b.getSimpleName() + ":\n");
         for (Method t : b.getDeclaredMethods()) {
             if (!Arrays.asList(a.getDeclaredMethods()).contains(t))
                 System.out.println(t.toGenericString());

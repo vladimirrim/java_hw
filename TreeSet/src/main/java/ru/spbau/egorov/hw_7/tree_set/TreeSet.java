@@ -19,7 +19,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     public TreeSet() {
         comparator = (Comparator<E>) (o1, o2) -> ((Comparable<? super E>) o1).compareTo(o2);
-        tree = new Tree<>();
+        tree = new Tree<>(comparator);
     }
 
 

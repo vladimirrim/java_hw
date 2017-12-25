@@ -60,7 +60,7 @@ class StackTest {
     }
 
     @Test
-    void popEmptyStackException(){
+    void popEmptyStackException() {
         assertThrows(EmptyStackException.class, () -> (new Stack<>()).pop());
     }
 

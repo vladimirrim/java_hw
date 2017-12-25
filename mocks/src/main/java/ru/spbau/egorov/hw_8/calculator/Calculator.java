@@ -28,11 +28,12 @@ public class Calculator {
      * @param input is string with expression.
      * @return calculation result.
      */
-    public Double calc(String input) {
+    public Double calc(String input) throws CalculationFailedException {
         try {
             input = toRPN(input);
         } catch (EmptyStackException e) {
             e.printStackTrace();
+            throw new CalculationFailedException(e);
         }
         Arrays.stream(input.split(" ")).forEach(number -> {
             switch (number) {
@@ -110,7 +111,11 @@ public class Calculator {
 
     public static void main(String[] args) {
         Calculator c = new Calculator(new Stack<>(), new Stack<>());
-        System.out.println(c.calc(args[0]));
+        try {
+            System.out.println(c.calc(args[0]));
+        } catch (CalculationFailedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: ru.spbau.egorov.hw_1.MultiThreadLazyTest
--------------------------------------------------------------------------------
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec - in ru.spbau.egorov.hw_1.MultiThreadLazyTest

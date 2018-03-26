@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: ru.spbau.egorov.hw_1.ThreadPoolImplTest
--------------------------------------------------------------------------------
-Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.698 sec - in ru.spbau.egorov.hw_1.ThreadPoolImplTest

@@ -52,7 +52,9 @@ public class ThreadPoolImpl<T> {
      */
     public LightFuture<T> addTask(Supplier<T> sup) {
         LightFutureImpl future = new LightFutureImpl(sup);
-        workQueue.add(future);
+        synchronized (workQueue) {
+            workQueue.add(future);
+        }
         return future;
 
     }
@@ -96,8 +98,7 @@ public class ThreadPoolImpl<T> {
                 try {
                     return fun.apply(LightFutureImpl.this.get());
                 } catch (LightExecutionException e) {
-                    e.printStackTrace();
-                    return null;
+                    throw new RuntimeException(e.getMessage(), e.getCause());
                 }
             });
         }

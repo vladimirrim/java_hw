@@ -11,7 +11,7 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         launch(args);
     }
 
@@ -22,6 +22,7 @@ public class MainApp extends Application {
         Parent root = loader.load(getClass().getResourceAsStream(fxmlFile));
         stage.setTitle("TicTacToe");
         stage.setScene(new Scene(root));
+        stage.setMinHeight(350);
         stage.show();
     }
 }

@@ -30,6 +30,7 @@ public class Controller {
         stage.setTitle("TicTacToe");
         assert root != null;
         stage.setScene(new Scene(root));
+        stage.setMinHeight(350);
         stage.show();
         ((Button) actionEvent.getSource()).getScene().getWindow().hide();
     }

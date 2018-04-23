@@ -141,6 +141,8 @@ public class MainController extends Controller {
             Stage stage = new Stage();
             stage.setTitle("Game Field");
             stage.setScene(new Scene(root));
+            stage.setMinHeight(350);
+            stage.setMinWidth(350);
             stage.show();
             button.getScene().getWindow().hide();
         } catch (IOException e) {
@@ -161,6 +163,7 @@ public class MainController extends Controller {
             Stage stage = new Stage();
             stage.setTitle("Game Statistics");
             stage.setScene(new Scene(root));
+            stage.setMinHeight(350);
             stage.show();
             ((Button) actionEvent.getSource()).getScene().getWindow().hide();
         } catch (IOException e) {

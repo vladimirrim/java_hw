@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,6 +25,8 @@ class ServerTest {
         new Thread(server::start).start();
         sleep(100);
         hostName = server.getHostName();
+        if (!Files.exists(Paths.get("./testDirs/dir1")))
+            Files.createDirectory(Paths.get("./testDirs/dir1"));
     }
 
     @Test

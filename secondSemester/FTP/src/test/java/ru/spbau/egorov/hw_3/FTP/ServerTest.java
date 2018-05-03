@@ -20,7 +20,7 @@ class ServerTest {
     private String lineSeparator = System.getProperty("line.separator");
 
     @BeforeAll
-    static void setUp() throws InterruptedException {
+    static void setUp() throws InterruptedException, IOException {
         server = new Server(8888);
         new Thread(server::start).start();
         sleep(100);

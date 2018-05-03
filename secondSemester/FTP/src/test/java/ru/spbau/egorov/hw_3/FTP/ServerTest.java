@@ -1,6 +1,5 @@
 package ru.spbau.egorov.hw_3.FTP;
 
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -25,8 +24,8 @@ class ServerTest {
         new Thread(server::start).start();
         sleep(100);
         hostName = server.getHostName();
-        if (!Files.exists(Paths.get("./testDirs/dir1")))
-            Files.createDirectory(Paths.get("./testDirs/dir1"));
+        if (!Files.exists(Paths.get("./testDirs/dir1/nothing")))
+            Files.createDirectory(Paths.get("./testDirs/dir1/nothing"));
     }
 
     @Test
@@ -54,18 +53,10 @@ class ServerTest {
     }
 
     @Test
-    void onListRequestEmptyDirectory() throws IOException, InvalidProtocolException {
-        Client client = new Client(hostName, 8888);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        client.list("./testDirs/dir1", stream);
-        assertEquals("Number of files in directory ./testDirs/dir1: 0" + lineSeparator, stream.toString());
-    }
-
-    @Test
     void oneGetAndOneListRequests() throws IOException, InvalidProtocolException {
         Client client = new Client(hostName, 8888);
         String ansList = "Number of files in directory ./testDirs: 2" + lineSeparator +
-                "name: dir1 isDirectory: false" + lineSeparator +
+                "name: dir1 isDirectory: true" + lineSeparator +
                 "name: file.txt isDirectory: false" + lineSeparator;
         String ansGet = "jojo";
         ByteArrayOutputStream[] streams = new ByteArrayOutputStream[2];
@@ -80,9 +71,8 @@ class ServerTest {
     @Test
     void onListRequestTenRequests() throws IOException, InterruptedException, InvalidProtocolException {
         Client client = new Client(hostName, 8888);
-        String lineSeparator = System.getProperty("line.separator");
         String ans = "Number of files in directory ./testDirs: 2" + lineSeparator +
-                "name: dir1 isDirectory: false" + lineSeparator +
+                "name: dir1 isDirectory: true" + lineSeparator +
                 "name: file.txt isDirectory: false" + lineSeparator;
         ByteArrayOutputStream[] streams = new ByteArrayOutputStream[10];
         for (int i = 0; i < 10; i++) {
@@ -92,6 +82,14 @@ class ServerTest {
         for (int i = 0; i < 10; i++) {
             assertEquals(ans, streams[i].toString());
         }
+    }
+
+    @Test
+    void onListRequestEmptyDirectory() throws IOException, InvalidProtocolException {
+        Client client = new Client(hostName, 8888);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        client.list("./testDirs/dir1/nothing", stream);
+        assertEquals("Number of files in directory ./testDirs/dir1/nothing: 0" + lineSeparator, stream.toString());
     }
 
     @Test

@@ -124,7 +124,7 @@ public class Server {
             for (Path path : paths) {
                 dos.writeInt(path.getFileName().toString().getBytes().length);
                 dos.write(path.getFileName().toString().getBytes());
-                dos.writeBoolean(Files.isDirectory(Paths.get((path.getFileName().toString()))));
+                dos.writeBoolean(Files.isDirectory(path));
             }
         }
     }

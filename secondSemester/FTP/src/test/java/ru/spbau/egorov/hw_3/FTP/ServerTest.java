@@ -35,18 +35,26 @@ class ServerTest {
     @Test
     void serverOnGetRequest() throws IOException, InvalidProtocolException {
         Server localServer = new Server(8887);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ByteArrayOutputStream bais = new ByteArrayOutputStream();
         String ansGet = "jojo";
-        localServer.onGetRequest(new DataOutputStream(stream), new DataInputStream(Files.newInputStream(Paths.get("./testDirs/file.txt"))));
-        assertEquals(ansGet, stream.toString());
+        DataOutputStream dos = new DataOutputStream(bais);
+        dos.writeInt("./testDirs/file.txt".length());
+        dos.write("./testDirs/file.txt".getBytes());
+        localServer.onGetRequest(new DataOutputStream(baos), new DataInputStream(new ByteArrayInputStream(bais.toByteArray())));
+        assertEquals(ansGet, baos.toString());
     }
 
     @Test
     void serverOnListRequest() throws IOException, InvalidProtocolException {
-        Server localServer = new Server(8887);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        localServer.onListRequest(new DataOutputStream(stream), new DataInputStream(Files.newInputStream(Paths.get("./testDirs/file.txt"))));
-        assertEquals("Number of files in directory ./testDirs/file.txt: 0" + lineSeparator, stream.toString());
+        Server localServer = new Server(8886);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ByteArrayOutputStream bais = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bais);
+        dos.writeInt("./testDirs/file.txt".length());
+        dos.write("./testDirs/file.txt".getBytes());
+        localServer.onListRequest(new DataOutputStream(baos), new DataInputStream(new ByteArrayInputStream(bais.toByteArray())));
+        assertEquals("Number of files in directory ./testDirs/file.txt: 0" + lineSeparator, baos.toString());
     }
 
     @Test

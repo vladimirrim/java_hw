@@ -3,9 +3,7 @@ package ru.spbau.egorov.hw_3.FTP;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.EOFException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -21,7 +19,13 @@ class ServerTest {
     @BeforeAll
     static void setUp() throws InterruptedException, IOException {
         server = new Server(8888);
-        new Thread(server::start).start();
+        new Thread(() -> {
+            try {
+                server.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
         sleep(100);
         hostName = server.getHostName();
         if (!Files.exists(Paths.get("./testDirs/dir1/nothing")))
@@ -29,7 +33,24 @@ class ServerTest {
     }
 
     @Test
-    void onGetRequestEmptyPathNameExceptions() throws IOException, InvalidProtocolException, InterruptedException {
+    void serverOnGetRequest() throws IOException, InvalidProtocolException {
+        Server localServer = new Server(8887);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        String ansGet = "jojo";
+        localServer.onGetRequest(new DataOutputStream(stream), new DataInputStream(Files.newInputStream(Paths.get("./testDirs/file.txt"))));
+        assertEquals(ansGet, stream.toString());
+    }
+
+    @Test
+    void serverOnListRequest() throws IOException, InvalidProtocolException {
+        Server localServer = new Server(8887);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        localServer.onListRequest(new DataOutputStream(stream), new DataInputStream(Files.newInputStream(Paths.get("./testDirs/file.txt"))));
+        assertEquals("Number of files in directory ./testDirs/file.txt: 0" + lineSeparator, stream.toString());
+    }
+
+    @Test
+    void onGetRequestEmptyPathNameExceptions() throws InterruptedException {
         Client client = new Client(hostName, 8888);
         assertThrows(EOFException.class, () -> client.get("", new ByteArrayOutputStream()));
         sleep(100);
@@ -37,7 +58,7 @@ class ServerTest {
     }
 
     @Test
-    void onListRequestEmptyPathNameExceptions() throws IOException, InvalidProtocolException, InterruptedException {
+    void onListRequestEmptyPathNameExceptions() throws InterruptedException {
         Client client = new Client(hostName, 8888);
         assertThrows(EOFException.class, () -> client.list("", new ByteArrayOutputStream()));
         sleep(100);
@@ -69,7 +90,7 @@ class ServerTest {
     }
 
     @Test
-    void onListRequestTenRequests() throws IOException, InterruptedException, InvalidProtocolException {
+    void onListRequestTenRequests() throws IOException, InvalidProtocolException {
         Client client = new Client(hostName, 8888);
         String ans = "Number of files in directory ./testDirs: 2" + lineSeparator +
                 "name: dir1 isDirectory: true" + lineSeparator +
@@ -93,7 +114,7 @@ class ServerTest {
     }
 
     @Test
-    void onGetRequestTenRequests() throws InterruptedException, IOException, InvalidProtocolException {
+    void onGetRequestTenRequests() throws IOException, InvalidProtocolException {
         Client client = new Client(hostName, 8888);
         ByteArrayOutputStream[] streams = new ByteArrayOutputStream[10];
         String ans = "jojo";

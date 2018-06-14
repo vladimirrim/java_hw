@@ -1,9 +1,0 @@
-Number of files in directory ./: 8
-name: . isDirectory: true
-name: .idea isDirectory: true
-name: FTP.iml isDirectory: false
-name: pim.txt isDirectory: false
-name: pim.xml isDirectory: false
-name: pom.xml isDirectory: false
-name: src isDirectory: true
-name: target isDirectory: true

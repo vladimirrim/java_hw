@@ -8,6 +8,6 @@ public class MethodWithTwoAnnotations {
     @AfterClass
     @BeforeClass
     void test() {
-        System.out.print(1);
+        System.out.print("Before and After");
     }
 }

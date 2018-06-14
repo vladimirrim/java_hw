@@ -6,11 +6,11 @@ public class TwoTestsNoExceptions {
 
     @Test
     void testOne() {
-        System.out.print(5);
+        System.out.print("Test1");
     }
 
     @Test
     void testTwo() {
-        System.out.print(6);
+        System.out.print("Test2");
     }
 }

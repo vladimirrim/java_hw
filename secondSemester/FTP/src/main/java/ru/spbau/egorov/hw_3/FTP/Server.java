@@ -71,7 +71,8 @@ public class Server {
             InetAddress address = serverSocket.getInetAddress();
             hostName = address.getHostName();
             while (isRunning) {
-                try (Socket clientSocket = serverSocket.accept()) {
+                try {
+                    Socket clientSocket = serverSocket.accept();
                     Runnable worker = () -> {
                         try (DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
                              DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream())) {

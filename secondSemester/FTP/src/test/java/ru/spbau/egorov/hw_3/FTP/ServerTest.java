@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ServerTest {
     private static String hostName;
@@ -42,7 +43,7 @@ class ServerTest {
         dos.writeInt("./testDirs/file.txt".length());
         dos.write("./testDirs/file.txt".getBytes());
         localServer.onGetRequest(new DataOutputStream(baos), new DataInputStream(new ByteArrayInputStream(bais.toByteArray())));
-        assertEquals(ansGet, baos.toString());
+        assertEquals(ansGet, baos.toString().substring(8));
     }
 
     @Test
@@ -51,10 +52,11 @@ class ServerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ByteArrayOutputStream bais = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(bais);
-        dos.writeInt("./testDirs/file.txt".length());
-        dos.write("./testDirs/file.txt".getBytes());
+        dos.writeInt("./testDirs".length());
+        dos.write("./testDirs".getBytes());
         localServer.onListRequest(new DataOutputStream(baos), new DataInputStream(new ByteArrayInputStream(bais.toByteArray())));
-        assertEquals("Number of files in directory ./testDirs/file.txt: 0" + lineSeparator, baos.toString());
+        assertTrue( baos.toString().contains("dir1"));
+        assertTrue( baos.toString().contains("file.txt"));
     }
 
     @Test

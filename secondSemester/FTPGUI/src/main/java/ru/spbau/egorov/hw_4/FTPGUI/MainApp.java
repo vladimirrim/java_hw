@@ -17,12 +17,32 @@ import static java.lang.Thread.sleep;
 public class MainApp extends Application {
     private static String hostName;
     private static int port;
-    public static void main(String[] args) throws InterruptedException {
-        Server server = new Server(8888);
+
+    /**
+     * Runs the application on local server.
+     *
+     * @param args are the hostname of the local server and the port on which server will be running.
+     */
+    public static void main(String[] args) {
+        if (args.length != 2) {
+            System.out.println("Invalid number of arguments.Expected 2: <hostname> <port>.");
+            return;
+        }
+        try {
+            port = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+            System.out.println("Error occurred during parsing port. Error: " + e.getLocalizedMessage());
+            return;
+        }
+        Server server = new Server(port);
         new Thread(server::start).start();
-        sleep(200);
+        try {
+            sleep(200);
+        } catch (InterruptedException e) {
+            System.out.println("Error occurred during initializing server. Error: " + e.getLocalizedMessage());
+            return;
+        }
         hostName = args[0];
-        port = Integer.parseInt(args[1]);
         launch(args);
     }
 
@@ -32,7 +52,7 @@ public class MainApp extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
         Parent root = loader.load();
         Controller controller = loader.getController();
-        controller.setClient(new Client(hostName,port));
+        controller.setClient(new Client(hostName, port));
         stage.setTitle("FTP");
         stage.setScene(new Scene(root));
         stage.setMinHeight(350);

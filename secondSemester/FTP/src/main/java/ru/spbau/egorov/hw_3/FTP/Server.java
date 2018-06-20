@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import static java.lang.Thread.sleep;
+
 /**
  * This class implement FTP server that can handle get and list requests.
  */
@@ -47,6 +49,8 @@ public class Server {
                     e.printStackTrace();
                 }
             }).start();
+            sleep(200);
+            System.out.println("Server is now running.");
             Scanner s = new Scanner(System.in);
             while (true) {
                 String request = s.nextLine();
@@ -58,6 +62,8 @@ public class Server {
             }
         } catch (NumberFormatException e) {
             System.out.println("Unable to parse port number.");
+        } catch (InterruptedException e) {
+            System.out.println("Interrupted.");
         }
     }
 
@@ -127,7 +133,7 @@ public class Server {
         byte[] path = new byte[stringSize];
         dis.readFully(path);
         Path file = Paths.get(new String(path));
-        if (!Files.exists(file)) {
+        if (!Files.exists(file) || Files.isDirectory(file)) {
             dos.writeLong(0);
         } else {
             dos.writeLong(Files.size(file));

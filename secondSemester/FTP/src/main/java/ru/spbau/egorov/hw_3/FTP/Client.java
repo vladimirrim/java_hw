@@ -41,7 +41,8 @@ public class Client {
                     return;
                 }
                 if (params.length != 2) {
-                    System.out.println("Wrong request format.Expected request type and ath to the file.");
+                    System.out.println("Wrong request format.Expected request type and path to the file.");
+                    continue;
                 }
                 try {
                     switch (params[0]) {
@@ -76,8 +77,8 @@ public class Client {
     public void list(String path, OutputStream os) throws InvalidProtocolException, IOException {
         try (Socket socket = new Socket(hostName, port);
              DataInputStream inputStream = new DataInputStream(socket.getInputStream());
-             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-             DataOutputStream dos = new DataOutputStream(os)) {
+             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream())) {
+            DataOutputStream dos = new DataOutputStream(os);
             String sep = System.getProperty("line.separator");
             outputStream.writeInt(RequestType.LIST_REQUEST.getCode());
             outputStream.writeInt(path.getBytes().length);
